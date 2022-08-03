@@ -41,6 +41,8 @@ func Decode(value cadence.Value) (any, error) {
 			}
 		}
 		return data, nil
+	case cadence.Address:
+		return value.String(), nil
 	default:
 		if value == nil {
 			return nil, nil
