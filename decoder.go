@@ -1,6 +1,8 @@
 package cadenceDecoder
 
-import "github.com/onflow/cadence"
+import (
+	"github.com/onflow/cadence"
+)
 
 // Decode decode cadence to json
 func Decode(value cadence.Value) (any, error) {
@@ -37,16 +39,28 @@ func Decode(value cadence.Value) (any, error) {
 				return data, err
 			}
 			if v != nil {
-				data[value.Pairs[i].Key.String()] = v
+				data[replaceBothSideMarks(value.Pairs[i].Key.String())] = v
 			}
 		}
 		return data, nil
 	case cadence.Address:
 		return value.String(), nil
+	case cadence.String:
+		return replaceBothSideMarks(value.ToGoValue().(string)), nil
 	default:
 		if value == nil {
 			return nil, nil
 		}
 		return value.ToGoValue(), nil
 	}
+}
+
+func replaceBothSideMarks(data string) string {
+	if data[0] == '"' {
+		data = data[1:]
+	}
+	if data[len(data)-1] == '"' {
+		data = data[:len(data)-1]
+	}
+	return data
 }
