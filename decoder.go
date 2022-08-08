@@ -56,6 +56,9 @@ func Decode(value cadence.Value) (any, error) {
 }
 
 func replaceBothSideMarks(data string) string {
+	if len(data) < 1 {
+		return ""
+	}
 	if data[0] == '"' {
 		data = data[1:]
 	}
